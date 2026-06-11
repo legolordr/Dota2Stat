@@ -2,35 +2,58 @@
 @inject IHttpClientFactory ClientFactory
 @rendermode InteractiveServer
 
-<div class="search-field">
-    <h1>Поиск игрока</h1>
-    <p>Введите Dota ID</p>
-
-    <div class="input-field">
-        <input class="form-control" placeholder="ID..." @bind="Id"/>
-        <button class="btn-primary" @onclick="SearchProfile">Найти</button>
-    </div>
-
-    @if (RootObject != null)
-    {
-        <div class="profile-card">
-            <img src="@RootObject.Profile.AvatarFull"/>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-2">
             <div class="main-card">
-                <h5 class="card-title">@RootObject.Profile.Name</h5>
-                <div>@RootObject.LeaderboardRank</div>
-                <a href="@RootObject.Profile.ProfileUrl" class="btn-outline-secondary">Steam профиль</a>
+                <div style="color: white">
+                    <h3 style="">Поиск игрока</h3>
+                    <p>Введите Dota ID</p>
+                </div>
+                <div class="card-input">
+                    <input class="form-control" placeholder="ID..." @bind="Id" />
+                    <button class="btn btn-dota-red" @onclick="SearchProfile">Найти</button>
+                </div>
             </div>
         </div>
-    }
+
+        <div class="col-md-3">
+            @if (RootObject != null)
+            {
+                <div class="card-player">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="@RootObject.Profile.AvatarFull"
+                             class="rounded"
+                             style="width: 80px; height: 80px; object-fit: cover" />
+                        <div class="flex-grow-1">
+                            <h5 class="card-title mb-1">@RootObject.Profile.Name</h5>
+                            <div class="card-text mb-2">
+                                Ранг: @(RootObject.LeaderboardRank ?? 0)
+                            </div>
+                            <a href="@RootObject.Profile.ProfileUrl"
+                               target="_blank"
+                               class="btn btn-dota-red btn-sm w-100">Steam профиль</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="main-card text-center text-white p-4">
+                    <p>👈 Введите ID игрока в панели слева</p>
+                </div>
+            }
+        </div>
+    </div>
 </div>
 
 @code {
-    private int Id {get; set;}
-    private RootObject? RootObject {get; set;}
+    private int Id { get; set; }
+    private RootObject? RootObject { get; set; }
 
     private async Task SearchProfile()
     {
-        if (string.IsNullOrEmpty(Id.ToString()))
+        if (Id <= 0)
         {
             RootObject = null;
             return;
