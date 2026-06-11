@@ -1,5 +1,42 @@
-﻿<h3>ProfileCard</h3>
+﻿@using Dota2Stat.Models
+@inject IHttpClientFactory ClientFactory
+@rendermode InteractiveServer
+
+<div class="search-field">
+    <h1>Поиск игрока</h1>
+    <p>Введите Dota ID</p>
+
+    <div class="input-field">
+        <input class="form-control" placeholder="ID..." @bind="Id"/>
+        <button class="btn-primary" @onclick="SearchProfile">Найти</button>
+    </div>
+
+    @if (RootObject != null)
+    {
+        <div class="profile-card">
+            <img src="@RootObject.Profile.AvatarFull"/>
+            <div class="main-card">
+                <h5 class="card-title">@RootObject.Profile.Name</h5>
+                <div>@RootObject.LeaderboardRank</div>
+                <a href="@RootObject.Profile.ProfileUrl" class="btn-outline-secondary">Steam профиль</a>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
-    
+    private int Id {get; set;}
+    private RootObject? RootObject {get; set;}
+
+    private async Task SearchProfile()
+    {
+        if (string.IsNullOrEmpty(Id.ToString()))
+        {
+            RootObject = null;
+            return;
+        }
+
+        var client = ClientFactory.CreateClient();
+        RootObject = await client.GetFromJsonAsync<RootObject>($"https://api.opendota.com/api/players/{Id}");
+    }
 }
