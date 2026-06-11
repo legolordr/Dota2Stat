@@ -4,43 +4,38 @@
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="main-card">
-                <div style="color: white">
-                    <h3 style="text-align: center">Поиск игрока</h3>
-                    <p style="text-align: center">Введите Dota ID</p>
+                <div>
+                    <h2 style="font: bold; text-align: center">Search players</h2>
                 </div>
                 <div class="card-input">
-                    <input class="form-control" placeholder="ID..." @bind="Id" />
+                    <input class="form-control" placeholder="ID..." @bind="Id"/>
                     <button class="btn btn-dota-red" @onclick="SearchProfile">Найти</button>
+                    <span class="dota-red">По сравнению с моей кромешной тьмой, твоя душа просто сияет!</span>
+                    <span class="dota-red-by">By Shadow Fiend</span>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-9">
             @if (RootObject != null)
             {
-                <div class="card-player">
-                    <div class="d-flex align-items-center gap-3">
+                <div class="card-player p-4">
+                    <div class="text-center mb-3">
                         <img src="@RootObject.Profile.AvatarFull"
-                             class="rounded"
-                             style="width: 80px; height: 80px; object-fit: cover" />
-                        <div class="flex-grow-1">
-                            <h5 class="card-title mb-1">@RootObject.Profile.Name</h5>
-                            <div class="card-text mb-2">
-                                Ранг: @(RootObject.LeaderboardRank ?? 0)
-                            </div>
-                            <a href="@RootObject.Profile.ProfileUrl"
-                               target="_blank"
-                               class="btn btn-dota-red btn-sm w-100">Steam профиль</a>
-                        </div>
+                             class="rounded-circle"
+                             style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #ff3333;" />
                     </div>
-                </div>
-            }
-            else
-            {
-                <div class="main-card text-center text-white p-4">
-                    <p>Введите ID игрока в панели слева</p>
+                    <div class="text-center">
+                        <h3 class="text-white mb-2">@RootObject.Profile.Name</h3>
+                        <div class="rank-info mb-3">
+                            <span class="badge bg-danger fs-6 p-2">Место в мире: @(RootObject.LeaderboardRank ?? 0)</span>
+                        </div>
+                        <a href="@RootObject.Profile.ProfileUrl"
+                           target="_blank"
+                           class="btn btn-dota-red w-100">Открыть Steam профиль</a>
+                    </div>
                 </div>
             }
         </div>
@@ -48,7 +43,7 @@
 </div>
 
 @code {
-    private int Id { get; set; }
+    private int? Id { get; set; } = null;
     private RootObject? RootObject { get; set; }
 
     private async Task SearchProfile()

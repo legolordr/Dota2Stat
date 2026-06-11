@@ -6,6 +6,7 @@
     box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
     backdrop-filter: blur(10px);
     color: white;
+    min-height: 330px;
 }
 
 .card-input{
@@ -33,7 +34,7 @@
     border-radius: 10px;
     transition: 0.3s;
 }
-.card-input button:hover {
+.btn-dota-red:hover{
     background-color: #ff0000;
     color: white;
     box-shadow: 0 0 15px #ff0000;
@@ -46,6 +47,7 @@
     color: white;
     border-radius: 20px;
     padding: 1rem;
+    min-height: 330px;
 }
 .card-player img{
      border-radius: 15px;
@@ -53,3 +55,15 @@
      margin-bottom: 15px;
  }
 
+.dota-red{
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: 0.3s;
+    text-align: center;
+    margin-top: 25px;
+}
+.dota-red-by{
+    color: white;
+    text-align: end;
+}
