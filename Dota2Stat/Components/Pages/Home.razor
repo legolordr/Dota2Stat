@@ -1,9 +1,45 @@
 ﻿@page "/"
-
-<PageTitle>Главная страница</PageTitle>
+@using Dota2Stat.Models
+@inject IHttpClientFactory ClientFactory;
+@rendermode InteractiveServer
 
 <div class="container-fluid">
     <div class="row">
-        <ProfileCard/>
+        <div class="main-card col-lg-2">
+            <div>
+                <h2 style="font: bold; text-align: center">Search players</h2>
+            </div>
+            <div class="card-input">
+                <input class="form-control" placeholder="ID..." @bind="Id"/>
+                <button class="btn btn-dota-red" @onclick="SearchProfile">Найти</button>
+                <span class="dota-red">По сравнению с моей кромешной тьмой, твоя душа просто сияет!</span>
+                <span class="dota-red-by">By Shadow Fiend</span>
+            </div>
+        </div>
+            <div class="col-lg-10">
+                @if (RootObject != null)
+                {
+                    <ProfileCard RootObject="RootObject"/>
+                }
+            </div>
     </div>
 </div>
+
+@code
+{
+    private int? Id { get; set; }
+    private RootObject? RootObject { get; set; }
+
+    private async Task SearchProfile()
+    {
+        if (Id <= 0 | Id == null)
+        {
+            RootObject = null;
+            return;
+        }
+
+        var client = ClientFactory.CreateClient();
+        RootObject = await client.GetFromJsonAsync<RootObject>($"https://api.opendota.com/api/players/{Id}");
+    }
+
+}

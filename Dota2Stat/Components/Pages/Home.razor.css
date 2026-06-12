@@ -1,0 +1,38 @@
+﻿.main-card{
+    background: rgba(30, 0, 0, 0.8);
+    border: 2px solid #ff3333;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    color: white;
+    min-height: 330px;
+}
+.card-input{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(30, 0, 0, 0.8);
+}
+
+.card-input input{
+    background: rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid #550000 !important;
+    color: white !important;
+    border-radius: 10px;
+}
+.card-input input::placeholder{
+    color: #888
+}
+.dota-red{
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: 0.3s;
+    text-align: center;
+    margin-top: 25px;
+}
+.dota-red-by{
+    color: white;
+    text-align: end;
+}
