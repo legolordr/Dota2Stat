@@ -25,3 +25,7 @@
     color: white;
     text-align: end;
 }
+.hero-stat-item{
+    background: rgba(0,0,0,0.5);
+    border-radius: 8px;
+}
