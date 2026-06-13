@@ -11,8 +11,8 @@
             </div>
             <div class="card-input">
                 <input class="form-control" placeholder="ID..." @bind="Id"/>
-                <button class="btn btn-dota-red" @onclick="SearchProfile">Найти</button>
-                <span class="dota-red">По сравнению с моей кромешной тьмой, твоя душа просто сияет!</span>
+                <button class="btn btn-dota-red" @onclick="GetProfile">Найти</button>
+                <span class="dota-red">По сравнению с моей кромешной тьмой твоя душа просто сияет!</span>
                 <span class="dota-red-by">By Shadow Fiend</span>
             </div>
         </div>
@@ -22,32 +22,106 @@
                 <ProfileCard RootObject="RootObject" Winrate="Winrate"/>
             }
         </div>
+        <div class="col-lg-6">
+            @if (RecentMatch != null && RecentMatch.Any())
+            {
+                <div class="main-card p-3">
+                    <h4 class="text-white mb-3">Недавние матчи</h4>
+                    @foreach (var match in RecentMatch.Take(5))
+                    {
+                        <div class="match-item p-2 mb-2" style="background: rgba(0,0,0,0.5); border-radius: 8px;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div style="min-width: 120px;">
+                                    <span class="text-white">@GetHeroName(match.HeroId)</span>
+                                </div>
+                                <div>
+                                    <span class="text-success">@match.Kills</span>
+                                    <span class="text-white">/</span>
+                                    <span class="text-danger">@match.Deaths</span>
+                                    <span class="text-white">/</span>
+                                    <span class="text-warning">@match.Assists</span>
+                                </div>
+                                <div>
+                                    @if (match.RadiantWin)
+                                    {
+                                        <span class="text-success">✅ Победа</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">❌ Поражение</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </div>
 </div>
 
 @code
 {
     private int? Id { get; set; }
-    private RootObject? RootObject { get; set; }
-    private WL Winrate { get; set; }
-    private readonly string _baseUrl =  "https://api.opendota.com/api/players/";
 
-    private async Task SearchProfile()
+    private RootObject? RootObject { get; set; }
+    private WL? Winrate { get; set; }
+    private List<RecentMatch>? RecentMatch { get; set; }
+    private Dictionary<long, string>? Heroes { get; set; }
+
+    private readonly string _baseUrl = "https://api.opendota.com/api";
+
+    private async Task GetProfile()
     {
-        if (Id <= 0 | Id == null)
+        if (Id <= 0 || Id == null)
         {
             RootObject = null;
+            RecentMatch = null;
             return;
         }
 
         var client = ClientFactory.CreateClient();
-        RootObject = await client.GetFromJsonAsync<RootObject>($"{_baseUrl}{Id}");
-        await GetWrPlayer();
+
+        var profileTask = client.GetFromJsonAsync<RootObject>($"{_baseUrl}/players/{Id}");
+        var winrateTask = client.GetFromJsonAsync<WL>($"{_baseUrl}/players/{Id}/wl");
+        var matchesTask = client.GetFromJsonAsync<List<RecentMatch>>($"{_baseUrl}/players/{Id}/recentMatches");
+        var heroesTask = LoadHeroes();
+
+        await Task.WhenAll(profileTask, winrateTask, matchesTask, heroesTask);
+
+        RootObject = await profileTask;
+        Winrate = await winrateTask;
+        RecentMatch = await matchesTask;
+        Heroes = await heroesTask;
+
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task GetWrPlayer()
     {
         var client = ClientFactory.CreateClient();
-        Winrate = await client.GetFromJsonAsync<WL>($"{_baseUrl}{Id}/wl");
+        Winrate = await client.GetFromJsonAsync<WL>($"{_baseUrl}/players/{Id}/wl");
+    }
+
+    private async Task GetRecentMatches()
+    {
+        var client = ClientFactory.CreateClient();
+        RecentMatch = await client.GetFromJsonAsync<List<RecentMatch>>($"{_baseUrl}/players/{Id}/recentMatches");
+    }
+
+    private async Task<Dictionary<long,string>?> LoadHeroes()
+    {
+        var client = ClientFactory.CreateClient();
+        var heroes = await client.GetFromJsonAsync<List<Hero>>($"{_baseUrl}/heroes");
+        return heroes?.ToDictionary(h => h.Id, h => h.LocalizedName);
+    }
+
+    private string GetHeroName(long heroId)
+    {
+        if (Heroes != null && Heroes.TryGetValue(heroId, out var name))
+        {
+            return name;
+        }
+        return $"Hero {heroId}";
     }
 }
