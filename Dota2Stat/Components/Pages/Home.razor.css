@@ -1,14 +1,4 @@
-﻿.main-card{
-    background: rgba(30, 0, 0, 0.8);
-    border: 2px solid #ff3333;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    color: white;
-    min-height: 330px;
-}
-.card-input{
+﻿.card-input{
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

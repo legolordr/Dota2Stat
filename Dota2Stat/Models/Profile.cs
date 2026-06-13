@@ -25,11 +25,11 @@ public class PlayerProfile
     public int Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; } = string.Empty;
+    public string? Name { get; set; }
 
     [JsonPropertyName("avatarfull")]
-    public string AvatarFull { get; set; } = string.Empty;
+    public string? AvatarFull { get; set; }
 
     [JsonPropertyName("profileurl")]
-    public string ProfileUrl { get; set; } = string.Empty;
+    public string? ProfileUrl { get; set; }
 }

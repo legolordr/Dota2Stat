@@ -2,25 +2,53 @@
 
 <div class="container-fluid">
     <div class="card-player p-4">
-        <div class="text-center mb-3">
+        <div class="d-flex align-items-center gap-3 justify-content-between">
             <img src="@RootObject.Profile.AvatarFull"
-                 class="rounded-circle"
-                 style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #ff3333;" />
+                 class="card rounded-circle"
+                 style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #ff3333;"/>
+            @if (Winrate.Win >= Winrate.Loss)
+            {
+                <div class="card bg-success border-success text-success bg-opacity-50 text-center p-2 fw-bold justify-content-center"
+                     style="min-height: 80px; min-width: 120px">
+                    Winrate: @(Winrate.Win * 100 / (Winrate.Win + Winrate.Loss))%
+                </div>
+            }
+            else if (Winrate.Win < Winrate.Loss)
+            {
+                <div class="card bg-danger border-danger text-danger bg-opacity-50 text-center p-2 fw-bold justify-content-center"
+                     style="min-height: 80px; min-width: 120px">
+                    Winrate: @(Winrate.Win * 100 / (Winrate.Win + Winrate.Loss))%
+                </div>
+            }
+
+            <div class="d-flex gap-2">
+                <div class="card bg-success bg-opacity-25 border-success text-center" style="min-width: 120px; min-height: 80px">
+                    <div class="card-body p-2">
+                        <small class="text-success text-uppercase fw-bold">Win</small>
+                        <h4 class="text-success mb-0 fw-bold">@Winrate.Win</h4>
+                    </div>
+                </div>
+                <div class="card bg-danger bg-opacity-25 border-danger text-center" style="min-width: 120px; min-height: 80px">
+                    <div class="card-body p-2">
+                        <small class="text-danger text-uppercase fw-bold">Loss</small>
+                        <h4 class="text-danger mb-0 fw-bold">@Winrate.Loss</h4>
+                    </div>
+                </div>
             </div>
+        </div>
         <div class="text-center">
             <h3 class="text-white mb-2">@RootObject.Profile.Name</h3>
             <div class="rank-info mb-3">
                 <span class="badge bg-danger fs-6 p-2">Место в мире: @(RootObject.LeaderboardRank ?? 0)</span>
-                </div>
+            </div>
             <a href="@RootObject.Profile.ProfileUrl"
                target="_blank"
                class="btn btn-dota-red w-100">Открыть Steam профиль</a>
-            </div>
         </div>
+    </div>
 </div>
 
 @code{
-
     [Parameter] public RootObject? RootObject { get; set; }
-
+    [Parameter] public WL Winrate {get; set; }
 }

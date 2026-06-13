@@ -19,7 +19,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white;
 }
 
 .content {
@@ -78,7 +78,15 @@ h1:focus {
     color: white;
     box-shadow: 0 0 15px #ff0000;
 }
-.btn-dota-red:focus{
-    outline: none;
+
+.main-card{
+    background: rgba(30, 0, 0, 0.8);
+    border: 2px solid #ff3333;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    color: white;
+    min-height: 330px;
 }
 
