@@ -30,7 +30,7 @@
             <div class="col-4">
                 @if (RootObject != null)
                 {
-                    <ProfileCard RootObject="RootObject" Winrate="Winrate" />
+                    <ProfileCard RootObject="RootObject" Winrate="Winrate"/>
                 }
             </div>
             <div class="col-6">
@@ -40,7 +40,7 @@
                         <h4 class="text-white mb-3">Недавние матчи</h4>
                         @foreach (var match in RecentMatch.Take(5))
                         {
-                            <div class="match-item p-2 mb-2" style="background: rgba(0,0,0,0.5); border-radius: 8px;">
+                            <div class="match-item p-2 mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div style="min-width: 120px;">
                                         <span class="text-white">@GetHeroName(match.HeroId)</span>
